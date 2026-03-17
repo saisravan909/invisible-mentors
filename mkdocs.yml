@@ -1,9 +1,32 @@
 site_name: "Invisible Mentors"
+
 theme:
   name: material
   palette:
-    primary: indigo
-    accent: blue
+    # This sets the top bar to your Navy Blue
+    - primary: custom
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # This allows a Dark Mode (very popular at Linux conferences!)
+    - primary: custom
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  
+  # This is the "Magic" that connects your colors
+  custom_dir: overrides
+
+extra_css:
+  - stylesheets/extra.css
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/your-username/invisible-mentors
+
 nav:
   - Home: index.md
   - Onboarding Guide: onboarding.md
