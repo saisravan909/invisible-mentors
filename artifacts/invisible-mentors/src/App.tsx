@@ -60,10 +60,12 @@ export default function App() {
           flexShrink: 0,
         }}
       >
-        <div style={{ padding: "0 20px 24px", borderBottom: "1px solid rgba(255,255,255,0.2)" }}>
-          <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: 0.5 }}>
-            Invisible Mentors
-          </div>
+        <div style={{ padding: "0 0 20px", borderBottom: "1px solid rgba(255,255,255,0.2)" }}>
+          <img
+            src="/logo.png"
+            alt="Invisible Mentors"
+            style={{ width: "100%", display: "block" }}
+          />
         </div>
         <div style={{ padding: "16px 0" }}>
           {(Object.keys(pages) as Array<"home" | "onboarding">).map((key) => (
