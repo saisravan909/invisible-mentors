@@ -1,6 +1,6 @@
-:root {
-  --md-primary-fg-color: #001f3f;
-  --md-primary-fg-color--light: #0074D9;
-  --md-primary-fg-color--dark: #001020;
-  --md-accent-fg-color: #0074D9;
+:root > * {
+  --md-primary-fg-color: #001f3f;        /* Your Logo Navy */
+  --md-primary-fg-color--light: #003366;
+  --md-primary-fg-color--dark: #000c1a;
+  --md-accent-fg-color: #0074D9;         /* Your Logo Tech Blue */
 }
