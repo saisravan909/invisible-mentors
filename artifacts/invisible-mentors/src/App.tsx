@@ -52,7 +52,7 @@ export default function App() {
       <nav
         style={{
           width: 260,
-          background: "#3f51b5",
+          background: "#001f3f",
           color: "white",
           display: "flex",
           flexDirection: "column",
@@ -77,13 +77,13 @@ export default function App() {
                 width: "100%",
                 textAlign: "left",
                 padding: "10px 20px",
-                background: activePage === key ? "rgba(255,255,255,0.15)" : "transparent",
+                background: activePage === key ? "rgba(0,116,217,0.25)" : "transparent",
                 color: "white",
                 border: "none",
                 cursor: "pointer",
                 fontSize: 14,
                 fontWeight: activePage === key ? 600 : 400,
-                borderLeft: activePage === key ? "3px solid #82b1ff" : "3px solid transparent",
+                borderLeft: activePage === key ? "3px solid #0074D9" : "3px solid transparent",
               }}
             >
               {pages[key].title}
@@ -104,8 +104,8 @@ export default function App() {
         }}
       >
         <style>{`
-          h1 { font-size: 2rem; color: #1a237e; margin-bottom: 16px; }
-          h3 { font-size: 1.2rem; color: #283593; margin-top: 32px; margin-bottom: 12px; }
+          h1 { font-size: 2rem; color: #001f3f; margin-bottom: 16px; }
+          h3 { font-size: 1.2rem; color: #0074D9; margin-top: 32px; margin-bottom: 12px; }
           p { margin-bottom: 16px; }
           ol { padding-left: 24px; }
           ol li { margin-bottom: 10px; }
