@@ -1,0 +1,9 @@
+extends: substitution
+message: "The word '%s' is too complex. Try using '%s' instead."
+level: error
+ignorecase: true
+swap:
+  leverage: use
+  utilize: use
+  paradigm: way of working
+  obfuscate: hide
