@@ -17,9 +17,6 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
   
-  # This is the "Magic" that connects your colors
-  custom_dir: overrides
-
 extra_css:
   - stylesheets/extra.css
 
