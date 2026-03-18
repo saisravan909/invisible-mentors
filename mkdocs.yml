@@ -1,4 +1,5 @@
 site_name: "Invisible Mentors"
+site_url: https://saisravan909.github.io/invisible-mentors
 
 theme:
   name: material
@@ -25,7 +26,7 @@ extra_css:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/your-username/invisible-mentors
+      link: https://github.com/saisravan909/invisible-mentors
 
 nav:
   - Home: index.md
