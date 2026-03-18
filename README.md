@@ -7,6 +7,7 @@
 
 ---
 
+
 ## The Problem: Maintainer Burnout
 In high-velocity open-source projects, the bottleneck is rarely the code — it is the **human bandwidth** required to mentor new contributors. Manual documentation reviews are repetitive, time-consuming, and prone to "gatekeeping" fatigue.
 
