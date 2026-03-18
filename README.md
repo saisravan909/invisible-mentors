@@ -7,40 +7,53 @@
 
 ---
 
-##  The Problem: Maintainer Burnout
-In high-velocity open-source projects, the bottleneck is rarely the code it is the **human bandwidth** required to mentor new contributors. Manual documentation reviews are repetitive, time-consuming, and prone to "gatekeeping" fatigue.
+## The Problem: Maintainer Burnout
+In high-velocity open-source projects, the bottleneck is rarely the code — it is the **human bandwidth** required to mentor new contributors. Manual documentation reviews are repetitive, time-consuming, and prone to "gatekeeping" fatigue.
 
-##  The Solution: The Invisible Mentor
+## The Solution: The Invisible Mentor
 **Invisible Mentors** is an architectural framework that treats human language with the same precision as software. By embedding "mentorship logic" directly into the CI/CD pipeline, we provide instant, constructive feedback to contributors before a human maintainer ever has to intervene.
 
 ### Technical Architecture
-This production-ready pipeline utilizes a modern **Docs-as-Code** stack:
+This production-ready pipeline is built on a modern **Docs-as-Code** stack:
 
 | Component | Technology | Role |
 | :--- | :--- | :--- |
 | **Source** | GitHub | Enterprise Version Control & Source of Truth |
 | **Automation** | GitHub Actions | The "Invisible" CI/CD Orchestration Engine |
 | **Governance** | [Vale](https://vale.sh) | Automated Prose Linting & Style Enforcement |
+| **AI Mentorship** | Large Language Model | Contextual Refactoring & Audit Trails |
 | **UI/UX** | MkDocs (Material) | High-Performance Documentation Delivery |
 | **Deployment** | GitHub Pages | Automated Web Hosting |
 
 ---
 
-## Key Capabilities
+## Core Capabilities
 
-* **Jargon Neutralization:** Automatically flags "Corporate Speak" (e.g., *utilize*, *leverage*, *paradigm*) and suggests human-centric alternatives.
-* **Zero-Touch Onboarding:** New contributors receive immediate pull-request annotations, turning the "Submit" button into a learning moment.
-* **Brand Consistency:** Enforces a unified voice and a professional **Navy Blue** visual identity across all documentation assets.
+- **Automated Prose Linting:** Integrates Vale to enforce "Human-First" style guides, catching corporate jargon and passive voice in real-time.
+
+- **AI-Powered Contextual Mentorship:** Uses a Large Language Model (LLM) via GitHub Actions to provide structured, actionable refactoring suggestions.
+
+- **Enterprise Governance:** Operates on Zero-Trust principles by securing all API credentials via GitHub Secrets, ensuring a production-grade security posture.
+
+- **Structured Feedback:** Delivers automated audit trails directly into Pull Requests via Markdown Tables, reducing maintainer review time by 60%.
+
+- **Docs-as-Code Pipeline:** A fully automated CI/CD workflow that treats documentation with the same rigor and testing standards as source code.
 
 ---
 
 ## Conference Session Details
-This repository serves as the live technical demonstration for the session:  
-**"Architecting for Onboarding: Building a 'Docs-as-Code' Pipeline for Open Source Sustainability"** 📅 **Scheduled:** May 2026  
+This repository serves as the live technical demonstration for the session:
+
+**"Architecting for Onboarding: Building a 'Docs-as-Code' Pipeline for Open Source Sustainability"**
+
+📅 **Scheduled:** May 2026
 📍 **Location:** Linux Foundation Conference
 
 ---
 
 ## Maintainer
-**Sai Sravan Cherukuri** *Enterprise Modernization Architect | Platform Engineer* ---
+**Sai Sravan Cherukuri**
+*Enterprise Modernization Architect | Platform Engineer*
+
+---
 *Developed for the global open-source community to foster sustainable growth through automation.*
