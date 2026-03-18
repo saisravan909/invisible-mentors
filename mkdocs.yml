@@ -3,6 +3,9 @@ site_url: https://saisravan909.github.io/invisible-mentors
 
 theme:
   name: material
+  features:
+    - search.suggest
+    - search.highlight
   palette:
     # This sets the top bar to your Navy Blue
     - primary: custom
