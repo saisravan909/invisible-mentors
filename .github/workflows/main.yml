@@ -1,4 +1,4 @@
-name: Deploy Invisible Mentors to GitHub Pages
+name: Invisible Mentors — Lint, Mentor & Deploy
 
 on:
   push:
@@ -9,17 +9,53 @@ permissions:
   contents: write
 
 jobs:
-  deploy:
+  lint-mentor-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
-      - name: Install MkDocs Material
-        run: pip install mkdocs-material
+      - name: Install Python dependencies
+        run: pip install mkdocs-material google-genai
+
+      - name: Install Vale
+        run: |
+          curl -sL https://github.com/errata-ai/vale/releases/download/v3.7.0/vale_3.7.0_Linux_64-bit.tar.gz \
+            | tar -xz -C /usr/local/bin vale
+
+      - name: Vale Jargon Check
+        id: vale_check
+        continue-on-error: true
+        run: |
+          vale --config .vale.ini docs/
+          echo "vale_status=pass" >> "$GITHUB_OUTPUT"
+
+      - name: AI Mentor Audit Table
+        if: steps.vale_check.outcome == 'failure'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          pip install google-genai -q
+          echo "════════════════════════════════════════════════════════════"
+          echo "  Your Invisible Mentor is generating the jargon audit…"
+          echo "════════════════════════════════════════════════════════════"
+          python ai_mentor.py --table --file docs/onboarding.md
 
       - name: Deploy to GitHub Pages
+        if: steps.vale_check.outcome == 'success'
         run: mkdocs gh-deploy --force
+
+      - name: Fail if jargon found
+        if: steps.vale_check.outcome == 'failure'
+        run: |
+          echo ""
+          echo "❌  Build blocked — jargon detected by Vale."
+          echo "    See the 'AI Mentor Suggestion' step above for the rewrite."
+          echo ""
+          exit 1
