@@ -17,8 +17,8 @@ Usage (GitHub Actions — PR comment):
   This writes clean Markdown (no decorators) so the sticky-comment bot
   can post it directly to the Pull Request.
 
-Note: The web app's Refactor Bot uses a separate Replit-managed Gemini
-      connection — no API key needed there. This script is for CI/CD use.
+Note: This script is designed for CI/CD pipelines and local development.
+      The GEMINI_API_KEY must be set as an environment variable or GitHub Secret.
 """
 
 from google import genai
