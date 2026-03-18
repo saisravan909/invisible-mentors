@@ -1,0 +1,69 @@
+name: Invisible Mentor V2.0 — AI Jargon Audit
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ai-mentorship:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install Dependencies
+        run: |
+          pip install google-genai
+          curl -sL https://github.com/errata-ai/vale/releases/download/v3.7.0/vale_3.7.0_Linux_64-bit.tar.gz \
+            | tar -xz -C /usr/local/bin vale
+
+      - name: Vale Jargon Check
+        id: vale_check
+        continue-on-error: true
+        run: vale --config .vale.ini docs/
+
+      - name: Run Invisible Mentor
+        id: mentor_script
+        if: steps.vale_check.outcome == 'failure'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python ai_mentor.py --pr --file docs/onboarding.md > mentor_report.md
+          echo "Mentor report generated:"
+          cat mentor_report.md
+
+      - name: Post AI Feedback to PR
+        if: steps.vale_check.outcome == 'failure'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: invisible-mentor-feedback
+          path: mentor_report.md
+
+      - name: Post Clean Bill of Health
+        if: steps.vale_check.outcome == 'success'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: invisible-mentor-feedback
+          message: |
+            ## ✅ Invisible Mentor — All Clear
+
+            > No jargon detected in `docs/`. This PR is ready to merge.
+
+            *Your Invisible Mentor approves. — Powered by [Gemini AI](https://aistudio.google.com)*
+
+      - name: Fail if jargon found
+        if: steps.vale_check.outcome == 'failure'
+        run: |
+          echo ""
+          echo "❌  Jargon detected — see the PR comment for the full audit table."
+          echo "    Fix the flagged phrases and push again."
+          echo ""
+          exit 1
