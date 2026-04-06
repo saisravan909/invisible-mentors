@@ -1,33 +1,92 @@
 site_name: "Invisible Mentors"
-site_url: https://saisravan909.github.io/Invisible-Mentors
+site_url: https://saisravan909.github.io/Invisible-Mentors/
+site_description: "AI-powered Docs-as-Code mentorship pipeline using Vale + Gemini 2.5 Flash"
+site_author: "Sai Sravan Cherukuri"
+repo_url: https://github.com/saisravan909/Invisible-Mentors
+repo_name: Invisible-Mentors
+edit_uri: ""
 
 theme:
   name: material
+  logo: assets/logo.png
+  favicon: assets/logo.png
   features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.instant
+    - navigation.footer
     - search.suggest
     - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - toc.follow
   palette:
-    # This sets the top bar to your Navy Blue
-    - primary: custom
-      scheme: default
+    - scheme: slate
+      primary: custom
+      accent: cyan
       toggle:
         icon: material/brightness-7
-        name: Switch to dark mode
-    # This allows a Dark Mode (very popular at Linux conferences!)
-    - primary: custom
-      scheme: slate
+        name: Switch to light mode
+    - scheme: default
+      primary: custom
+      accent: cyan
       toggle:
         icon: material/brightness-4
-        name: Switch to light mode
-  
-extra_css:
-  - stylesheets/extra.css
+        name: Switch to dark mode
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    repo: fontawesome/brands/github
+    logo: material/robot
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - attr_list
+  - md_in_html
+  - tables
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - toc:
+      permalink: true
+
+plugins:
+  - search:
+      separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
 
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/saisravan909/invisible-mentors
+      link: https://github.com/saisravan909/Invisible-Mentors
+      name: GitHub
+    - icon: material/web
+      link: https://im.saisravancherukuri.com
+      name: Demo Site
+  generator: false
+
+extra_css:
+  - stylesheets/extra.css
 
 nav:
   - Home: index.md
-  - Onboarding Guide: onboarding.md
+  - Contributor Guide: onboarding.md

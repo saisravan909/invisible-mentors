@@ -1,6 +1,215 @@
-:root > * {
-  --md-primary-fg-color: #001f3f;        /* Your Logo Navy */
-  --md-primary-fg-color--light: #003366;
-  --md-primary-fg-color--dark: #000c1a;
-  --md-accent-fg-color: #0074D9;         /* Your Logo Tech Blue */
+/* ─── Custom Color Palette ─────────────────────────────────────────────── */
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color:        #4f46e5;
+  --md-primary-fg-color--light: #818cf8;
+  --md-primary-fg-color--dark:  #3730a3;
+  --md-accent-fg-color:         #06b6d4;
+  --md-default-bg-color:        #0d1117;
+  --md-default-bg-color--light: #161b22;
+  --md-default-bg-color--lighter: #1c2230;
+  --md-default-fg-color:        #e6edf3;
+  --md-default-fg-color--light: #8b949e;
+  --md-code-bg-color:           #161b22;
+  --md-code-fg-color:           #e6edf3;
+}
+
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color:        #4f46e5;
+  --md-primary-fg-color--light: #6366f1;
+  --md-primary-fg-color--dark:  #3730a3;
+  --md-accent-fg-color:         #0891b2;
+}
+
+/* ─── Global Typography ────────────────────────────────────────────────── */
+.md-typeset {
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.md-typeset h1 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.md-typeset h2 {
+  font-weight: 700;
+  border-bottom: 2px solid var(--md-accent-fg-color);
+  padding-bottom: 0.4rem;
+  margin-top: 2.5rem;
+}
+
+/* ─── Hero Section ─────────────────────────────────────────────────────── */
+.hero-section {
+  text-align: center;
+  padding: 3rem 1rem 2rem;
+  background: linear-gradient(135deg, #0d1117 0%, #161b22 40%, #0d1117 100%);
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(79, 70, 229, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(79,70,229,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-logo {
+  width: min(420px, 90%);
+  height: auto;
+  margin: 0 auto 1.5rem;
+  display: block;
+  filter: drop-shadow(0 0 40px rgba(79, 70, 229, 0.5));
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+.hero-tagline {
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  font-weight: 500;
+  color: var(--md-default-fg-color--light);
+  margin: 0 auto 2rem;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ─── Stats Grid ───────────────────────────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1.25rem;
+  margin: 2rem 0;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, rgba(79,70,229,0.1), rgba(6,182,212,0.08));
+  border: 1px solid rgba(79, 70, 229, 0.3);
+  border-radius: 0.75rem;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(79,70,229,0.2);
+  border-color: var(--md-accent-fg-color);
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #818cf8, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--md-default-fg-color--light);
+}
+
+/* ─── Grid Cards ───────────────────────────────────────────────────────── */
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid.cards > ol > li {
+  border: 1px solid rgba(79,70,229,0.25);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  background: linear-gradient(135deg, rgba(79,70,229,0.05), rgba(6,182,212,0.03));
+}
+
+.md-typeset .grid.cards > ul > li:hover,
+.md-typeset .grid.cards > ol > li:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(79,70,229,0.2);
+  border-color: var(--md-accent-fg-color);
+}
+
+/* ─── Mermaid Diagrams ─────────────────────────────────────────────────── */
+.mermaid {
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+/* ─── Code Blocks ──────────────────────────────────────────────────────── */
+.md-typeset pre > code {
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+/* ─── Navigation ───────────────────────────────────────────────────────── */
+.md-header {
+  background: rgba(13, 17, 23, 0.95) !important;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 0 rgba(79,70,229,0.3);
+}
+
+.md-nav__logo img {
+  height: 2.2rem;
+  width: auto;
+}
+
+/* ─── Admonitions ──────────────────────────────────────────────────────── */
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: 0.5rem;
+  border-left-width: 4px;
+}
+
+/* ─── Tables ───────────────────────────────────────────────────────────── */
+.md-typeset table:not([class]) {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+
+.md-typeset table:not([class]) th {
+  background: rgba(79,70,229,0.25);
+  font-weight: 700;
+}
+
+.md-typeset table:not([class]) tr:nth-child(even) {
+  background: rgba(79,70,229,0.05);
+}
+
+/* ─── Fork Button ──────────────────────────────────────────────────────── */
+.fork-button {
+  background: linear-gradient(135deg, #4f46e5, #06b6d4) !important;
+  border: none !important;
+  font-weight: 700 !important;
+}
+
+/* ─── Footer ───────────────────────────────────────────────────────────── */
+.md-footer {
+  background: #0d1117;
+  border-top: 1px solid rgba(79,70,229,0.2);
+}
+
+/* ─── Tabs ─────────────────────────────────────────────────────────────── */
+.md-typeset .tabbed-labels > label {
+  font-weight: 600;
 }
