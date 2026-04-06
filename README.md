@@ -1,5 +1,8 @@
 <div align="center">
 
+<img src="docs/assets/logo.png" alt="Invisible Mentors" width="480" />
+
+
 # Invisible Mentors
 
 ### *Every contributor deserves instant feedback. Every maintainer deserves their time back.*
