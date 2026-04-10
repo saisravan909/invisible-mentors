@@ -1,6 +1,6 @@
 ---
 title: Home
-description: Automated Docs-as-Code pipeline — Vale + Gemini AI mentors every contributor, automatically.
+description: Automated Docs-as-Code pipeline — Vale + Gemini AI reviews every contributor PR automatically.
 ---
 
 <div class="hero-section" markdown>
@@ -24,28 +24,28 @@ description: Automated Docs-as-Code pipeline — Vale + Gemini AI mentors every 
 
 ---
 
-## The Problem Nobody Talks About
+## The Problem
 
-Open source projects thrive when contributors feel supported. But as a project grows, so does the documentation review burden. Maintainers spend hours each week reading pull requests — correcting the same jargon, fixing the same passive voice, repeating the same feedback they wrote the week before.
+Open source projects grow when contributors feel supported. But as a project grows, so does the documentation review burden. Maintainers end up spending hours each week going through pull requests, correcting the same jargon, fixing the same writing patterns, and leaving feedback they wrote a dozen times before.
 
-!!! danger "The Bottleneck"
-    The maintainer becomes the bottleneck. Not because of bad contributors — but because there's no automated layer between **"a draft was submitted"** and **"it's ready to merge"**.
+!!! warning "Where projects stall"
+    The maintainer becomes the bottleneck. Not because contributors write badly, but because there is no automated layer between "a draft was submitted" and "it is ready to merge."
 
-**Invisible Mentors removes that bottleneck entirely.**
+**Invisible Mentors fills that gap.**
 
 ---
 
 ## How It Works
 
-Every pull request runs through a two-layer automated pipeline — no human reviewer needed until the writing is already clean.
+Every pull request runs through a two-layer automated pipeline. No human reviewer is needed until the writing is already clean.
 
 ```mermaid
 flowchart TD
-    A([👤 Contributor Opens PR]) --> B{📋 Vale Scan\nJargon Ruleset}
-    B -->|✅ Writing is clean| C([🚀 Auto-Deploy\nto GitHub Pages])
-    B -->|⚠️ Jargon detected| D([🤖 Gemini 2.5 Flash\nAI Analysis])
-    D --> E([💬 Structured Feedback\nPosted as PR Comment])
-    E --> F([✏️ Contributor\nRevises & Pushes])
+    A([Contributor Opens PR]) --> B{Vale Scan\nJargon Ruleset}
+    B -->|Writing is clean| C([Auto-Deploy\nto GitHub Pages])
+    B -->|Jargon detected| D([Gemini 2.5 Flash\nAI Analysis])
+    D --> E([Structured Feedback\nPosted as PR Comment])
+    E --> F([Contributor\nRevises and Pushes])
     F --> B
 
     style A fill:#312e81,stroke:#6366f1,color:#e0e7ff
@@ -56,8 +56,8 @@ flowchart TD
     style F fill:#1e3a5f,stroke:#3b82f6,color:#dbeafe
 ```
 
-!!! success "The result"
-    A contributor gets expert-level writing feedback in **under 30 seconds** — faster than any human reviewer could open the tab.
+!!! success "What this means in practice"
+    A contributor gets detailed writing feedback in **under 30 seconds**, well before any maintainer has had a chance to open the PR.
 
 ---
 
@@ -65,47 +65,47 @@ flowchart TD
 
 <div class="grid cards" markdown>
 
--   :material-shield-check:{ .lg .middle } **Zero-Config Mentorship**
+-   :material-shield-check:{ .lg .middle } **Runs on Every PR Automatically**
 
     ---
 
-    Runs automatically on every PR via GitHub Actions. No setup per contributor, no accounts, no friction.
+    Triggered by GitHub Actions on each pull request. No per-contributor setup, no accounts, no friction.
 
--   :material-robot:{ .lg .middle } **Gemini 2.5 Flash AI**
+-   :material-robot:{ .lg .middle } **Gemini 2.5 Flash**
 
     ---
 
-    When jargon is detected, Gemini generates a structured rewrite with context, alternative phrases, and rationale — not just a flag.
+    When jargon is detected, Gemini reads the flagged text and generates a structured rewrite with alternatives and context, not just a flag.
 
 -   :material-file-search:{ .lg .middle } **Vale Prose Linting**
 
     ---
 
-    Custom ruleset targets corporate buzzwords: *leverage*, *utilize*, *paradigm*, *synergy* — caught before they reach `main`.
+    Custom ruleset catches corporate buzzwords before they land in your docs: *leverage*, *utilize*, *paradigm*, *synergy*.
 
 -   :fontawesome-brands-github:{ .lg .middle } **Native GitHub Integration**
 
     ---
 
-    Feedback posts as a sticky PR comment. Contributors never leave GitHub. No webhooks, no external dashboards.
+    Feedback posts as a sticky PR comment. Contributors stay in GitHub. No webhooks, no external dashboards to manage.
 
 -   :material-timer-outline:{ .lg .middle } **30-Second Feedback Loop**
 
     ---
 
-    Scan → analyze → comment. The entire pipeline runs in under 30 seconds from push to feedback.
+    Scan, analyze, comment. The full pipeline runs in under 30 seconds from push to feedback.
 
--   :material-open-source-initiative:{ .lg .middle } **100% Open Source**
+-   :material-open-source-initiative:{ .lg .middle } **MIT Licensed**
 
     ---
 
-    MIT licensed. Fork it, adapt it, make it your own. Built to be shared with the entire open source community.
+    Fork it, adapt it, make it your own. Built to be shared with anyone who wants it.
 
 </div>
 
 ---
 
-## Architecture Deep Dive
+## Architecture
 
 ### Request / Response Flow
 
@@ -120,100 +120,27 @@ sequenceDiagram
 
     C->>GH: git push (opens PR)
     GH->>GHA: Trigger: on pull_request
-
     GHA->>Vale: vale --config .vale.ini docs/
-
-    alt ✅ Writing is clean
-        Vale-->>GHA: Exit 0 — no issues
-        GHA->>Pages: mkdocs gh-deploy --force
-        Pages-->>C: 🌐 Docs live!
-    else ⚠️ Jargon detected
-        Vale-->>GHA: Exit 1 — issues found
-        GHA->>AI: Send flagged passages
-        AI-->>GHA: Structured rewrite + rationale
+    alt Writing is clean
+        Vale-->>GHA: exit 0
+        GHA->>Pages: mkdocs gh-deploy
+        Pages-->>C: Docs live at GitHub Pages
+    else Jargon detected
+        Vale-->>GHA: exit 1 with findings
+        GHA->>AI: Send flagged text
+        AI-->>GHA: Structured rewrite table
         GHA->>GH: Post sticky PR comment
-        GH-->>C: 🔔 Feedback notification
-        C->>GH: git push (revision)
-        GH->>GHA: Re-trigger pipeline
+        GH-->>C: Notification with feedback
     end
 ```
 
-### Pipeline States
-
-```mermaid
-stateDiagram-v2
-    direction LR
-
-    [*] --> Idle : PR opened
-    Idle --> Scanning : GitHub Actions triggered
-
-    Scanning --> Clean : Vale exit 0
-    Scanning --> Flagged : Vale exit 1
-
-    Flagged --> Analyzing : Gemini AI invoked
-    Analyzing --> Commented : Feedback posted to PR
-    Commented --> Scanning : Contributor pushes revision
-
-    Clean --> Deployed : mkdocs gh-deploy
-    Deployed --> [*] : PR merged ✅
-
-    state Scanning {
-        [*] --> ReadingFiles
-        ReadingFiles --> ApplyingRules
-        ApplyingRules --> [*]
-    }
-
-    state Analyzing {
-        [*] --> SendingContext
-        SendingContext --> GeneratingRewrite
-        GeneratingRewrite --> FormattingComment
-        FormattingComment --> [*]
-    }
-```
-
 ---
-
-## Technology Stack
-
-=== ":material-robot: AI Layer"
-
-    | Component | Detail |
-    |:---|:---|
-    | **Model** | Gemini 2.5 Flash |
-    | **Provider** | Google AI Studio |
-    | **SDK** | `google-genai` (Python) |
-    | **Output** | Structured Markdown table in PR comment |
-    | **Trigger** | Only when Vale detects jargon |
-
-=== ":material-file-search: Linting Layer"
-
-    | Component | Detail |
-    |:---|:---|
-    | **Tool** | Vale v3.7.0 |
-    | **Config** | `.vale.ini` at repo root |
-    | **Rules** | Custom jargon ruleset in `vale-styles/` |
-    | **Scope** | All `.md` files under `docs/` |
-    | **Exit code** | `0` = clean, `1` = issues found |
-
-=== ":fontawesome-brands-github: CI/CD Layer"
-
-    | Component | Detail |
-    |:---|:---|
-    | **Platform** | GitHub Actions |
-    | **Trigger** | `on: push` to `main`, `on: pull_request` |
-    | **Docs deploy** | `mkdocs gh-deploy --force` |
-    | **Hosting** | GitHub Pages (`gh-pages` branch) |
-    | **Permissions** | `contents: write` for Pages deploy |
-
----
-
-## By the Numbers
 
 <div class="stats-grid" markdown>
 
 <div class="stat-card" markdown>
-<span class="stat-number">< 30s</span>
-<span class="stat-label">Feedback delivered</span>
+<span class="stat-number">28s</span>
+<span class="stat-label">Average time to first feedback</span>
 </div>
 
 <div class="stat-card" markdown>
@@ -237,7 +164,7 @@ stateDiagram-v2
 
 ## Try It Yourself
 
-!!! tip "Fork & Test in 3 Steps"
+!!! tip "Fork and test in 3 steps"
 
     **1. Fork the repository**
     ```bash
@@ -257,13 +184,13 @@ stateDiagram-v2
 
     **3. Open a Pull Request**
 
-    Watch the GitHub Actions pipeline run, Vale flag the jargon, and Gemini AI post a structured rewrite — all within 30 seconds.
+    Watch the pipeline run, Vale flag the jargon, and Gemini post a structured rewrite directly to your PR, all within 30 seconds.
 
     [Fork on GitHub :fontawesome-brands-github:](https://github.com/saisravan909/Invisible-Mentors/fork){ .md-button .md-button--primary .fork-button }
 
 ---
 
-!!! info "Presented at Linux Foundation Open Source Summit · May 2026"
-    Invisible Mentors was built to solve a real problem faced by every growing open source project: **maintainer burnout from documentation review**. By fully automating the mentorship loop, maintainers reclaim their time and contributors get expert feedback instantly.
+!!! info "Presented at Linux Foundation Open Source Summit, May 2026"
+    This project was built to address a real issue that comes up in almost every growing open source project: maintainers spending too much time on documentation review. Automating that feedback loop lets maintainers focus on work only they can do, and gives contributors a faster path to getting their changes merged.
 
-    *Built by **Sai Sravan Cherukuri** — Enterprise Modernization Architect*
+    *Built by **Sai Sravan Cherukuri***
