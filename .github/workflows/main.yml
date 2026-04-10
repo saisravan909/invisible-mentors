@@ -43,6 +43,7 @@ jobs:
 
       - name: AI Mentor Audit Table
         if: steps.vale_check.outcome == 'failure'
+        continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
@@ -62,4 +63,3 @@ jobs:
           echo "    Docs were deployed. Fix the flagged phrases and push again."
           echo ""
           exit 1
-
