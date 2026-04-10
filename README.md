@@ -17,31 +17,29 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-2D9B27?style=flat)](https://github.com/saisravan909/Invisible-Mentors/pulls)
 [![Last Commit](https://img.shields.io/github/last-commit/saisravan909/Invisible-Mentors?style=flat&color=1B3A6B)](https://github.com/saisravan909/Invisible-Mentors/commits/main)
 
-**[View Live Docs →](https://saisravan909.github.io/Invisible-Mentors)** &nbsp;·&nbsp; **[See How It Works →](#how-it-works)** &nbsp;·&nbsp; **[Try It Yourself →](#get-it-in-your-project)**
+**[View Live Docs](https://saisravan909.github.io/Invisible-Mentors)** &nbsp;·&nbsp; **[See How It Works](#how-it-works)** &nbsp;·&nbsp; **[Try It Yourself](#get-it-in-your-project)**
 
 </div>
 
 ---
 
-## The Problem Nobody Talks About
+## The Problem
 
-Picture your best engineer. Now picture them spending three hours every Friday reading documentation pull requests — correcting the same jargon, fixing the same passive voice, repeating the same feedback they wrote the week before.
+Think about how most open source documentation reviews actually work. Someone opens a pull request, a maintainer reads through it a few days later, leaves a comment asking for rewrites, and the contributor either fixes it or quietly disappears.
 
-That is not mentoring. That is burnout with extra steps.
+The same corrections come up over and over again: jargon that sounds impressive but says nothing, passive voice that buries the action, sentences that take three reads to parse. Reviewers know this pattern well because they have been writing the same feedback for months.
 
-Open source projects lose contributors every day — not because the code is hard, but because the feedback loop is slow, inconsistent, and entirely dependent on human availability. A newcomer submits their first pull request on a Tuesday, waits four days for a review, receives a terse comment saying "please rewrite this," and never comes back.
+That kind of review is not mentoring. It is repetitive work that burns people out and slows down projects that should be growing.
 
-**The bottleneck is never the code. It is the people reviewing it.**
+The real problem is timing. By the time a maintainer looks at a PR, a contributor has already moved on mentally. Slow feedback breaks the loop.
 
 ---
 
-## The Solution
+## What This Project Does
 
-**Invisible Mentors** is a production-ready automation pipeline that reads every pull request the moment it lands, scans for jargon and unclear writing, and posts structured, human-quality feedback — before a single maintainer has to look.
+Invisible Mentors runs automatically on every pull request. The moment someone opens a PR, a GitHub Actions pipeline scans the documentation changes with [Vale](https://vale.sh), a prose linter configured with a custom jargon ruleset. If the writing is clean, the docs deploy. If there are issues, [Gemini AI](https://aistudio.google.com) reads the flagged passages and posts a structured comment directly to the PR with specific rewrites suggested.
 
-The feedback is immediate. The tone is constructive. The maintainer's time is protected.
-
-> *"The Mentor is invisible. The impact is not."*
+The contributor gets feedback in seconds. The maintainer does not have to read it first.
 
 ---
 
@@ -49,14 +47,14 @@ The feedback is immediate. The tone is constructive. The maintainer's time is pr
 
 ```mermaid
 flowchart TD
-    A(["👤 Contributor\nOpens a Pull Request"]) --> B["🔄 GitHub Actions\nPipeline Triggers Automatically"]
-    B --> C{"📖 Vale Prose Linter\nScans the Documentation"}
-    C -- "✅ Writing is clear" --> D["🚀 Docs Deploy\nto GitHub Pages"]
-    C -- "❌ Jargon detected" --> E["🤖 Gemini AI\nGenerates a Rewrite"]
-    E --> F["💬 Structured Feedback\nPosted Directly to the PR"]
-    F --> G(["✏️ Contributor Revises\nand Pushes Again"])
+    A(["Contributor\nOpens a Pull Request"]) --> B["GitHub Actions\nPipeline Triggers"]
+    B --> C{"Vale Prose Linter\nScans the Documentation"}
+    C -- "Writing is clean" --> D["Docs Deploy\nto GitHub Pages"]
+    C -- "Jargon detected" --> E["Gemini AI\nGenerates a Rewrite"]
+    E --> F["Structured Feedback\nPosted to the PR"]
+    F --> G(["Contributor Revises\nand Pushes Again"])
     G --> B
-    D --> H(["🌐 Live Documentation\nPublished for Everyone"])
+    D --> H(["Live Documentation\nPublished"])
 
     style A fill:#1B3A6B,color:#ffffff,stroke:#1B3A6B
     style B fill:#2c3e50,color:#ffffff,stroke:#2c3e50
@@ -68,128 +66,28 @@ flowchart TD
     style H fill:#27ae60,color:#ffffff,stroke:#27ae60
 ```
 
-In plain terms:
+When a PR comes in:
 
-1. A contributor opens a Pull Request with a documentation change
-2. The pipeline runs automatically — no one presses a button
-3. Vale scans the writing for corporate jargon and passive voice
-4. If jargon is found, Gemini AI generates a clean rewrite and posts it as a PR comment
-5. The contributor fixes it and pushes again
-6. The docs deploy automatically to the live site
+1. Vale checks every `.md` file in `docs/` against a custom ruleset that flags jargon words and patterns
+2. If everything passes, the docs build and deploy to GitHub Pages automatically
+3. If jargon is found, Gemini 2.5 Flash reads the flagged text and generates a plain-English rewrite
+4. That rewrite gets posted as a comment on the PR with a table showing exactly what changed and why
 
-**No human is needed until the writing is already clean.**
+The contributor sees the comment, fixes the flagged lines, and pushes again. The cycle repeats until the writing is clean.
 
 ---
 
-## What the Mentor Catches
+## What Vale Catches
 
-The pipeline is built around a simple principle: documentation should read like a person wrote it, not a committee approved it.
+The ruleset flags words that tend to obscure meaning rather than clarify it:
 
-| ❌ What Gets Flagged | ✅ What the Mentor Suggests |
-|:---|:---|
-| "Please **utilize** our setup script" | "Please **use** our setup script" |
-| "**Leverage** the existing infrastructure" | "**Use** what is already in place" |
-| "Align with our **paradigms**" | "Follow our approach" |
-| "Enable **synergistic** collaboration" | "Work together" |
-| "**Operationalize** the workflow" | "Run the workflow" |
-
-These are not cosmetic fixes. Jargon is the single biggest reason new contributors feel excluded from open source. When documentation reads like a corporate memo, it signals a closed community. Clear writing signals a welcoming one.
-
----
-
-## The Full Pipeline
-
-```mermaid
-flowchart LR
-    subgraph REPO ["📁 Repository"]
-        DOCS["docs/\nonboarding.md"]
-        STYLES["styles/Welcome/\nJargon Rules"]
-        VALE_INI[".vale.ini\nConfiguration"]
-    end
-
-    subgraph PIPELINE ["⚙️ GitHub Actions — Runs on Every PR"]
-        direction TB
-        VALE["Vale\nProse Linter"]
-        AI["Gemini 2.5 Flash\nAI Mentor"]
-        DEPLOY["MkDocs\nSite Builder"]
-    end
-
-    subgraph OUTPUTS ["📤 Outputs"]
-        COMMENT["PR Comment\nwith Rewrite"]
-        SITE["GitHub Pages\nLive Docs Site"]
-    end
-
-    DOCS --> VALE
-    STYLES --> VALE
-    VALE_INI --> VALE
-    VALE -- "Jargon found" --> AI
-    AI --> COMMENT
-    VALE -- "Writing is clear" --> DEPLOY
-    DEPLOY --> SITE
-```
-
----
-
-## The Technology Stack
-
-| Layer | Technology | Purpose |
+| Word or Phrase | Why It Gets Flagged | What to Write Instead |
 |:---|:---|:---|
-| **Version Control** | GitHub | Source of truth for all code and documentation |
-| **CI/CD Automation** | GitHub Actions | Runs the full pipeline on every pull request |
-| **Prose Linting** | [Vale](https://vale.sh) | Flags jargon, passive voice, and unclear language |
-| **AI Feedback** | Gemini 2.5 Flash | Reads flagged text and generates a human rewrite |
-| **Documentation Site** | MkDocs Material | Renders a fast, searchable, beautiful docs site |
-| **Hosting** | GitHub Pages | Publishes the live site automatically after every clean merge |
-
-Every component is open source. Every credential is stored securely as a GitHub Secret. No vendor lock-in. No monthly platform fees beyond a standard GitHub account.
-
----
-
-## The Business Case
-
-This is not a developer productivity tool. It is an organizational force multiplier.
-
-- **One maintainer** can support **ten times more contributors** without increasing review hours
-- **New contributors** receive feedback in seconds, not days — dramatically improving first-PR completion rates
-- **Documentation quality** is enforced automatically, reducing downstream support burden
-- **Every Pull Request** carries a built-in audit trail — no separate compliance tooling required
-- **Zero infrastructure cost** — runs on GitHub's CI/CD tier at no additional charge for public repositories
-
-The return is not theoretical. It is measurable in maintainer hours recovered and contributors retained.
-
----
-
-## Live Demo
-
-This repository *is* the demo. Here is exactly what happens when a contributor opens a pull request with jargon in the docs.
-
-**The contributor writes this:**
-```markdown
-We encourage you to utilize our setup script to leverage the latest paradigms.
-```
-
-**Vale catches it in seconds:**
-```
-docs/onboarding.md
- 3:28  warning  Use 'use' instead of 'utilize'    Welcome.Jargon
- 3:51  warning  Use 'use' instead of 'leverage'   Welcome.Jargon
- 3:70  warning  Avoid 'paradigms'                 Welcome.Jargon
-
-✖ 3 warnings
-```
-
-**The Invisible Mentor posts this to the PR:**
-
-> **Invisible Mentor — Jargon Audit**
->
-> | Line | Original | Suggested Revision | Reason |
-> |:---|:---|:---|:---|
-> | 3 | "utilize our setup script" | "use our setup script" | 'Utilize' adds syllables without adding meaning |
-> | 3 | "leverage the latest paradigms" | "use the latest approach" | Jargon creates distance from the reader |
->
-> *Revise the flagged phrases and push again — the mentor will re-check automatically.*
-
-**The contributor fixes it. The docs deploy. The maintainer was never paged.**
+| leverage | Vague business-speak for "use" | use, apply, build on |
+| utilize | A longer word for "use" with no added meaning | use |
+| paradigm | Rarely means anything specific in docs | approach, model, pattern |
+| synergy / synergize | Abstract and hard to act on | working together, collaboration |
+| innovative solution | Filler phrase that adds no information | just describe what it does |
 
 ---
 
@@ -203,21 +101,21 @@ cd Invisible-Mentors
 # Run Vale locally (requires Vale CLI — https://vale.sh)
 vale docs/
 
-# Run the AI Mentor locally (requires a free Gemini API key)
+# Run the AI mentor locally (requires a free Gemini API key)
 export GEMINI_API_KEY="your-key-from-aistudio.google.com"
 python ai_mentor.py --file docs/onboarding.md
 ```
 
-**To bring this pipeline into your own project — copy four files:**
+To bring this into your own project, copy four files:
 
 ```
-.github/workflows/invisible-mentor.yml   ← The PR-check pipeline
-styles/Welcome/                          ← The jargon ruleset
-.vale.ini                                ← Linter configuration
-ai_mentor.py                             ← The AI mentor script
+.github/workflows/invisible-mentor.yml   # the PR-check pipeline
+styles/Welcome/                          # the jargon ruleset
+.vale.ini                                # linter configuration
+ai_mentor.py                             # the AI mentor script
 ```
 
-Then add `GEMINI_API_KEY` as a GitHub repository secret. Open a PR with jargon in the docs. The mentor will respond.
+Then add `GEMINI_API_KEY` as a repository secret. Open a PR with some jargon in the docs and watch what happens.
 
 ---
 
@@ -240,6 +138,6 @@ Then add `GEMINI_API_KEY` as a GitHub repository secret. Open a PR with jargon i
 
 <br>
 
-*MIT Licensed · Built for the global open source community · No platforms. No fees. Just better docs.*
+*MIT Licensed · Built for the open source community · No platforms. No fees. Just better docs.*
 
 </div>
