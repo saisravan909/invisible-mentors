@@ -1,0 +1,65 @@
+name: Invisible Mentors — Lint, Mentor & Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  lint-mentor-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set git identity
+        run: |
+          git config user.name "Sai Sravan Cherukuri"
+          git config user.email "saisravan@gmail.com"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install Python dependencies
+        run: pip install mkdocs-material google-genai
+
+      - name: Install Vale
+        run: |
+          curl -sL https://github.com/errata-ai/vale/releases/download/v3.7.0/vale_3.7.0_Linux_64-bit.tar.gz \
+            | tar -xz -C /usr/local/bin vale
+
+      - name: Vale Jargon Check
+        id: vale_check
+        continue-on-error: true
+        run: vale --config .vale.ini docs/
+
+      - name: AI Mentor Audit Table
+        if: steps.vale_check.outcome == 'failure'
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          echo "════════════════════════════════════════════════════════════"
+          echo "  Your Invisible Mentor is generating the jargon audit…"
+          echo "════════════════════════════════════════════════════════════"
+          python ai_mentor.py --table --file docs/onboarding.md
+
+      - name: Deploy Docs to GitHub Pages
+        run: mkdocs gh-deploy --force
+
+      - name: Fail if jargon found
+        if: steps.vale_check.outcome == 'failure'
+        run: |
+          echo ""
+          echo "❌  Jargon detected — see the AI Mentor step above for the rewrite."
+          echo "    Docs were deployed. Fix the flagged phrases and push again."
+          echo ""
+          exit 1
